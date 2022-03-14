@@ -1,3 +1,5 @@
+# Required Libraries
+
 library(shiny)
 library(shinythemes)
 library(thematic)
@@ -72,6 +74,7 @@ main_page <- tabPanel(
     )
 )
 
+# Histogram for selected first numeric variable
 
 draw_plot_1 <- function(data_input, num_var_1, bins){
     if(num_var_1 != not_sel){
@@ -81,6 +84,8 @@ draw_plot_1 <- function(data_input, num_var_1, bins){
     }
 }
 
+# Histogram for selected second numeric variable
+
 draw_plot_2 <- function(data_input, num_var_2, bins){
     if(num_var_2 != not_sel){
         ggplot(data = data_input,
@@ -88,6 +93,8 @@ draw_plot_2 <- function(data_input, num_var_2, bins){
             geom_histogram(bins = bins, fill = "goldenrod1")
     }
 }
+
+# Bar plot for selected factor variable
 
 draw_plot_3 <- function(data_input, fact_var){
     if(fact_var != not_sel){
@@ -97,6 +104,8 @@ draw_plot_3 <- function(data_input, fact_var){
     }
 }
 
+# Plot for visualize the relationships among variables
+
 draw_plot_4 <- function(data_input, num_var_1, num_var_2, fact_var){
     if(fact_var!=not_sel){
         data_input[,(fact_var):= as.factor(data_input[,get(fact_var)])]
@@ -104,24 +113,24 @@ draw_plot_4 <- function(data_input, num_var_1, num_var_2, fact_var){
     if(num_var_1 != not_sel & num_var_2 != not_sel & fact_var != not_sel){
         ggplot(data = data_input,
                aes_string(x = num_var_1, y = num_var_2, color = fact_var)) +
-            geom_point()
+            geom_point() # Distribution of two numeric variables wrt the factor variable
         
     }
     
     else if(num_var_1 != not_sel & num_var_2 != not_sel & fact_var == not_sel){
         ggplot(data = data_input,
                aes_string(x = num_var_1, y = num_var_2)) +
-            geom_point()
+            geom_point() # Distribution of two numeric variables 
     }
     else if(num_var_1 != not_sel & num_var_2 == not_sel & fact_var != not_sel){
         ggplot(data = data_input,
                aes_string(x = fact_var, y = num_var_1, col = fact_var)) +
-            geom_boxplot()
+            geom_boxplot() # Distribution of one numeric variable wrt the factor variable
     }
     else if(num_var_1 == not_sel & num_var_2 != not_sel & fact_var != not_sel){
         ggplot(data = data_input,
                aes_string(x = fact_var, y = num_var_2, col = fact_var)) +
-            geom_boxplot() 
+            geom_boxplot() # Distribution of one numeric variable wrt the factor variable
     }
 }
 
@@ -139,7 +148,7 @@ server <- function(input, output){
         fread(input$csv_input$datapath)
     })
     
-    observeEvent(data_input(),{
+observeEvent(data_input(),{
         num <- select_if(data_input(), is.numeric)
         fac <- select_if(data_input(), is.character)
         choices1 <- c(not_sel,names(num))
