@@ -14,7 +14,19 @@ thematic_shiny(font = "auto")
 
 not_sel <- "Not Selected"
 
-
+about_page <- tabPanel(
+    title = "About",
+    br(),
+   "This is a reproducible shiny app which is developed for exploring the data set initially.",
+   br(),
+   "The code behind this dashboard can be downloaded from the", a("GitHub.", href="https://github.com/SMART-Research/Randi2022"),
+   br(),
+   br(),
+   "The following reference format is used to build this shiny app:",
+   br(),
+   a("How to Build a Data Analysis App in R Shiny", href="https://towardsdatascience.com/how-to-build-a-data-analysis-app-in-r-shiny-143bee9338f7")
+   )
+    
 main_page <- tabPanel(
     title = "Visualization",
     sidebarLayout(
@@ -80,7 +92,7 @@ draw_plot_1 <- function(data_input, num_var_1, bins){
     if(num_var_1 != not_sel){
         ggplot(data = data_input,
                aes_string(x = num_var_1)) +
-            geom_histogram(bins = bins, fill = "hotpink4")
+            geom_histogram(bins = bins, color= "white" , fill = "coral")
     }
 }
 
@@ -90,7 +102,7 @@ draw_plot_2 <- function(data_input, num_var_2, bins){
     if(num_var_2 != not_sel){
         ggplot(data = data_input,
                aes_string(x = num_var_2)) +
-            geom_histogram(bins = bins, fill = "goldenrod1")
+            geom_histogram(bins = bins, color= "white", fill = "goldenrod1")
     }
 }
 
@@ -138,7 +150,8 @@ draw_plot_4 <- function(data_input, num_var_1, num_var_2, fact_var){
 ui <- navbarPage(
     title = "Expolatory Data Analysis",
     theme = shinytheme(theme = "darkly"),
-    main_page
+    main_page,
+    about_page
 )
 
 server <- function(input, output){
